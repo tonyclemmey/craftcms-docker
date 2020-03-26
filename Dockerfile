@@ -1,4 +1,4 @@
-FROM wyveo/nginx-php-fpm:php74
+FROM wyveo/nginx-php-fpm:php72
 
 MAINTAINER Colin Wilson "colin@wyveo.com"
 
@@ -6,6 +6,11 @@ MAINTAINER Colin Wilson "colin@wyveo.com"
 ENV CRAFT_VERSION=2.7 CRAFT_BUILD=10
 
 ENV CRAFT_ZIP=Craft-$CRAFT_VERSION.$CRAFT_BUILD.zip
+
+# Install ffmpeg
+RUN apt-get update -y && \
+	apt-get install ffmpeg -y && \
+	apt-get clean all
 
 # Remove default webroot files & set PHP session handler to Redis
 RUN rm -rf /usr/share/nginx/html/* && \
@@ -29,5 +34,10 @@ ADD ./config /usr/share/nginx/craft/config
 # Cleanup
 RUN rm /tmp/$CRAFT_ZIP && \
 chown -Rf nginx:nginx /usr/share/nginx/
+
+# Check versions
+RUN ffmpeg -version
+RUN php -v
+RUN php -m
 
 EXPOSE 80
