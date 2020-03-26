@@ -5,7 +5,7 @@ This is a  [Craft 3](https://craftcms.com/3) / [Craft 2](https://craftcms.com/) 
 | Docker Tag | Git Branch | Craft Release | Database | Caching |
 |-----|-------|-----|--------|--------|
 | latest | craft3 | 3.3.14 | PostgreSQL 11.5 | Redis 5.0.6 |
-| craft2 | craft2 | 2.7.10 | MariaDB 10.4.8 | Redis 5.0.6 |
+| craft2 | craft2 | 2.7.10 | MariaDB 10.4.12 | Redis 5.0.8 |
 
 Features:
 
