@@ -18,6 +18,9 @@ return array(
     'imageDriver' => 'imagick',
     'generateTransformsBeforePageLoad' => true,
     'sendPoweredByHeader' => false,
-    'cacheMethod' => 'redis'
+    'cacheMethod' => 'redis',
+
+    'userSessionDuration' => 'PT1H',
+    'devMode' => true,
 
 );
