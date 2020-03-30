@@ -24,7 +24,7 @@ RUN apt-get update -y && \
 	brew install mkcert && \
 	mkcert -install && \
 	# Lynis security audit
-	apt-get install lynis
+	apt-get install lynis -y
 
 # Remove default webroot files & set PHP session handler to Redis
 RUN rm -rf /usr/share/nginx/html/* && \
