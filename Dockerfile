@@ -22,7 +22,9 @@ RUN apt-get update -y && \
 	# mkcert
 	RUN apt-get install libnss3-tools -y && \
 	brew install mkcert && \
-	mkcert -install
+	mkcert -install && \
+	# Lynis security audit
+	apt-get install lynis
 
 # Remove default webroot files & set PHP session handler to Redis
 RUN rm -rf /usr/share/nginx/html/* && \
@@ -30,6 +32,8 @@ RUN rm -rf /usr/share/nginx/html/* && \
 	sed -i -e "s/memory_limit\s*=\s*.*/memory_limit = 256M/g" ${php_conf} && \
 	sed -i -e "s/session.save_handler\s*=\s*.*/session.save_handler = redis/g" ${php_conf} && \
 	sed -i -e "s/;session.save_path\s*=\s*.*/session.save_path = \"\${REDIS_PORT_6379_TCP}\"/g" ${php_conf}
+
+# https://dev.to/elabftw/10-steps-for-securing-a-php-app-5fnp
 
 # Download the latest Craft (https://craftcms.com/support/download-previous-versions)
 ADD https://download.buildwithcraft.com/craft/$CRAFT_VERSION/$CRAFT_VERSION.$CRAFT_BUILD/$CRAFT_ZIP /tmp/$CRAFT_ZIP
