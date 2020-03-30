@@ -33,7 +33,7 @@ ADD ./default.conf /etc/nginx/conf.d/default.conf
 RUN mkdir /etc/nginx/ssl && \
 openssl req -newkey rsa:2048 -new -x509 -days 365 -nodes -out /etc/nginx/ssl/server.crt -keyout /etc/nginx/ssl/server.key -subj /C=GB/ST=England/L=London/O=UK\ AB\ \(publ\)/CN=mysite.test && \
 chmod 600 /etc/nginx/ssl/server.key && \
-chmod 644 /etc/nginx/server.pem && \
+chmod 644 /etc/nginx/server.crt && \
 chown nginx:nginx /etc/nginx/ssl/server.*
 
 
