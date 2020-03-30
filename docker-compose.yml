@@ -10,6 +10,7 @@ services:
     image: tonyclemmey/craftcms-docker:craft2
     ports:
       - 80:80
+      - 443:443
     volumes:
       - craftcms-logs:/var/log
       - craftcms-data:/usr/share/nginx
