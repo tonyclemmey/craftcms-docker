@@ -29,6 +29,18 @@ RUN unzip -qqo /tmp/$CRAFT_ZIP 'craft/*' -d /usr/share/nginx/ && \
 # Add default craft cms nginx config
 ADD ./default.conf /etc/nginx/conf.d/default.conf
 
+# Install Linux-brew
+RUN apt-get install curl && \
+ruby -e “$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install)"
+
+# Add Linux-brew to your ~/.bash_profile by running
+echo 'export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"' >>~/.bash_profile
+echo 'export MANPATH="/home/linuxbrew/.linuxbrew/share/man:$MANPATH"' >>~/.bash_profile
+echo 'export INFOPATH="/home/linuxbrew/.linuxbrew/share/info:$INFOPATH"' >>~/.bash_profile
+
+# Add Linuxbrew to your PATH
+PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
+
 # Install and copy mkcert certificates
 RUN apt-get install libnss3-tools -y && \
 brew install mkcert && \
