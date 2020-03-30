@@ -29,9 +29,13 @@ RUN unzip -qqo /tmp/$CRAFT_ZIP 'craft/*' -d /usr/share/nginx/ && \
 # Add default craft cms nginx config
 ADD ./default.conf /etc/nginx/conf.d/default.conf
 
-# Add ssl keys
-# ADD ./nginx.crt /etc/ssl/nginx.crt
-# ADD ./nginx.key /etc/ssl/nginx.key
+# Create certificates
+RUN mkdir /etc/nginx/ssl && \
+openssl req -newkey rsa:2048 -new -x509 -days 365 -nodes -out /etc/nginx/ssl/server.crt -keyout /etc/nginx/ssl/server.key -subj /C=GB/ST=England/L=London/O=UK\ AB\ \(publ\)/CN=mysite.test && \
+chmod 600 /etc/nginx/ssl/server.key && \
+chmod 644 /etc/nginx/server.pem && \
+chown nginx:nginx /etc/nginx/ssl/server.*
+
 
 # Add default config
 ADD ./config /usr/share/nginx/craft/config
@@ -46,4 +50,4 @@ RUN php -v
 RUN php -m
 
 EXPOSE 80
-# EXPOSE 443
+EXPOSE 443
