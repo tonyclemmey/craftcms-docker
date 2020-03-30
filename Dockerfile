@@ -41,3 +41,4 @@ RUN php -v
 RUN php -m
 
 EXPOSE 80
+EXPOSE 443
