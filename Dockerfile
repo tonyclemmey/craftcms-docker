@@ -30,7 +30,7 @@ RUN unzip -qqo /tmp/$CRAFT_ZIP 'craft/*' -d /usr/share/nginx/ && \
 ADD ./default.conf /etc/nginx/conf.d/default.conf
 
 # Install and copy mkcert certificates
-RUN sudo apt install libnss3-tools -y && \
+RUN apt-get install libnss3-tools -y && \
 brew install mkcert && \
 mkcert -install && \
 mkcert mysite.test && \
