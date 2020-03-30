@@ -28,6 +28,10 @@ RUN unzip -qqo /tmp/$CRAFT_ZIP 'craft/*' -d /usr/share/nginx/ && \
 # Add default craft cms nginx config
 ADD ./default.conf /etc/nginx/conf.d/default.conf
 
+# Add ssl keys
+# ADD ./nginx.crt /etc/ssl/nginx.crt
+# ADD ./nginx.key /etc/ssl/nginx.key
+
 # Add default config
 ADD ./config /usr/share/nginx/craft/config
 
