@@ -5,6 +5,9 @@ MAINTAINER Colin Wilson "colin@wyveo.com"
 ENV CRAFT_VERSION=2.9 CRAFT_BUILD=2
 ENV CRAFT_ZIP=Craft-$CRAFT_VERSION.$CRAFT_BUILD.zip
 
+# Set domain / server name
+ENV DOMAIN_URL=mysite.test
+
 ### Install some stuff ###
 RUN apt-get update -y && \
 	apt-get upgrade -y && \
@@ -49,9 +52,9 @@ ADD ./default.conf /etc/nginx/conf.d/default.conf
 ADD ./config /usr/share/nginx/craft/config
 
 # Add SSL
-RUN mkcert mysite.test && \
-	cp ./mysite.test.pem ./etc/ssl/mysite.test.crt && \
-	cp ./mysite.test-key.pem ./etc/ssl/mysite.test.key
+RUN mkcert $DOMAIN_URL && \
+	cp ./$DOMAIN_URL.pem ./etc/ssl/$DOMAIN_URL.crt && \
+	cp ./$DOMAIN_URL-key.pem ./etc/ssl/$DOMAIN_URL.key
 
 # Cleanup
 RUN rm /tmp/$CRAFT_ZIP && \
