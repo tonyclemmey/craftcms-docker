@@ -30,16 +30,15 @@ RUN unzip -qqo /tmp/$CRAFT_ZIP 'craft/*' -d /usr/share/nginx/ && \
 ADD ./default.conf /etc/nginx/conf.d/default.conf
 
 # Install Linux-brew
-RUN apt-get install curl && \
-ruby -e “$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install)"
+RUN apt-get install build-essential curl file git
+RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
 
-# Add Linux-brew to your ~/.bash_profile by running
-RUN echo 'export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"' >>~/.bash_profile && \
-echo 'export MANPATH="/home/linuxbrew/.linuxbrew/share/man:$MANPATH"' >>~/.bash_profile && \
-echo 'export INFOPATH="/home/linuxbrew/.linuxbrew/share/info:$INFOPATH"' >>~/.bash_profile
-
-# Add Linuxbrew to your PATH
-RUN PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
+# Add Linux-brew to your ~/.bashrc by running
+RUN echo 'export PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin/:$PATH"' >>~/.bashrc && \
+echo 'export MANPATH="/home/linuxbrew/.linuxbrew/share/man:$MANPATH"' >>~/.bashrc && \
+echo 'export INFOPATH="/home/linuxbrew/.linuxbrew/share/info:$INFOPATH"' >>~/.bashrc && \
+source  ~/.bashrc && \
+brew help
 
 # Install and copy mkcert certificates
 RUN apt-get install libnss3-tools -y && \
