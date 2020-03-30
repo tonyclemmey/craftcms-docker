@@ -14,6 +14,7 @@ RUN apt-get update -y && \
 
 # Remove default webroot files & set PHP session handler to Redis
 RUN rm -rf /usr/share/nginx/html/* && \
+mkdir /usr/share/nginx/web && \
 sed -i -e "s/memory_limit\s*=\s*.*/memory_limit = 256M/g" ${php_conf} && \
 sed -i -e "s/session.save_handler\s*=\s*.*/session.save_handler = redis/g" ${php_conf} && \
 sed -i -e "s/;session.save_path\s*=\s*.*/session.save_path = \"\${REDIS_PORT_6379_TCP}\"/g" ${php_conf}
@@ -23,7 +24,7 @@ ADD https://download.buildwithcraft.com/craft/$CRAFT_VERSION/$CRAFT_VERSION.$CRA
 
 # Extract craft to webroot & remove default template files
 RUN unzip -qqo /tmp/$CRAFT_ZIP 'craft/*' -d /usr/share/nginx/ && \
-    unzip -qqoj /tmp/$CRAFT_ZIP 'public/index.php' -d /usr/share/nginx/web
+    unzip -qqoj /tmp/$CRAFT_ZIP 'public/index.php' -d /usr/share/nginx/web/
 
 # Add default craft cms nginx config
 ADD ./default.conf /etc/nginx/conf.d/default.conf
@@ -45,4 +46,4 @@ RUN php -v
 RUN php -m
 
 EXPOSE 80
-EXPOSE 443
+# EXPOSE 443
