@@ -34,12 +34,12 @@ RUN apt-get install curl && \
 ruby -e “$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install)"
 
 # Add Linux-brew to your ~/.bash_profile by running
-echo 'export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"' >>~/.bash_profile
-echo 'export MANPATH="/home/linuxbrew/.linuxbrew/share/man:$MANPATH"' >>~/.bash_profile
+RUN echo 'export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"' >>~/.bash_profile && \
+echo 'export MANPATH="/home/linuxbrew/.linuxbrew/share/man:$MANPATH"' >>~/.bash_profile && \
 echo 'export INFOPATH="/home/linuxbrew/.linuxbrew/share/info:$INFOPATH"' >>~/.bash_profile
 
 # Add Linuxbrew to your PATH
-PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
+RUN PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
 
 # Install and copy mkcert certificates
 RUN apt-get install libnss3-tools -y && \
