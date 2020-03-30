@@ -30,7 +30,7 @@ RUN unzip -qqo /tmp/$CRAFT_ZIP 'craft/*' -d /usr/share/nginx/ && \
 ADD ./default.conf /etc/nginx/conf.d/default.conf
 
 # Install Linux-brew
-RUN apt-get install build-essential curl file git
+RUN apt-get install build-essential curl file git -y
 RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
 
 # Add Linux-brew to your ~/.bashrc by running
