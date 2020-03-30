@@ -14,7 +14,7 @@ services:
     volumes:
       - craftcms-logs:/var/log
       - craftcms-data:/usr/share/nginx
-      - $HOME/nginx/ssl:/usr/share/nginx/ssl
+      - $HOME/certs:/etc/nginx/certs
     links:
       - mariadb
       - redis

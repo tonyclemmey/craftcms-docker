@@ -29,13 +29,13 @@ RUN unzip -qqo /tmp/$CRAFT_ZIP 'craft/*' -d /usr/share/nginx/ && \
 # Add default craft cms nginx config
 ADD ./default.conf /etc/nginx/conf.d/default.conf
 
-# Create certificates
-RUN mkdir /etc/nginx/ssl && \
-openssl req -newkey rsa:2048 -new -x509 -days 365 -nodes -out /etc/nginx/ssl/server.crt -keyout /etc/nginx/ssl/server.key -subj /C=GB/ST=England/L=London/O=UK\ AB\ \(publ\)/CN=mysite.test && \
-chmod 600 /etc/nginx/ssl/server.key && \
-chmod 644 /etc/nginx/ssl/server.crt && \
-chown nginx:nginx /etc/nginx/ssl/server.*
-
+# Install and copy mkcert certificates
+RUN sudo apt install libnss3-tools -y && \
+brew install mkcert && \
+mkcert -install && \
+mkcert mysite.test && \
+cp ./mysite.test.cert.pem ./etc/ssl/mysite.test.crt && \
+cp ./mysite.test-key.pem ./etc/ssl/mysite.test.key
 
 # Add default config
 ADD ./config /usr/share/nginx/craft/config
