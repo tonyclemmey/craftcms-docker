@@ -43,10 +43,10 @@ ADD https://download.buildwithcraft.com/craft/$CRAFT_VERSION/$CRAFT_VERSION.$CRA
 RUN unzip -qqo /tmp/$CRAFT_ZIP 'craft/*' -d /usr/share/nginx/ && \
     unzip -qqoj /tmp/$CRAFT_ZIP 'public/index.php' -d /usr/share/nginx/web/
 
-# Add default craft cms nginx config
+# Add default nginx config
 ADD ./default.conf /etc/nginx/conf.d/default.conf
 
-# Add default config
+# Add default craft cms config
 ADD ./config /usr/share/nginx/craft/config
 
 # Add custom craft files
