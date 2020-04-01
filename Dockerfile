@@ -52,19 +52,19 @@ ADD ./default.conf /etc/nginx/conf.d/default.conf
 ADD ./config /usr/share/nginx/craft/config
 
 # Add custom craft files
-ADD ./craft/app /usr/share/nginx/craft/app && \
-	./craft/plugins /usr/share/nginx/craft/plugins && \
-	./craft/plus /usr/share/nginx/craft/plus && \
-	./craft/storage /usr/share/nginx/craft/storage && \
-	./craft/templates /usr/share/nginx/craft/templates && \
-	./craft/translations /usr/share/nginx/craft/translations
+# ADD ./craft/app /usr/share/nginx/craft/app && \
+# 	./craft/plugins /usr/share/nginx/craft/plugins && \
+# 	./craft/plus /usr/share/nginx/craft/plus && \
+# 	./craft/storage /usr/share/nginx/craft/storage && \
+# 	./craft/templates /usr/share/nginx/craft/templates && \
+# 	./craft/translations /usr/share/nginx/craft/translations
 
 # Add custom web files
-ADD ./web/assets /usr/share/nginx/web/assets && \
-	./web/simplesamlphp /usr/share/nginx/web/simplesamlphp && \
-	./web/transcoder /usr/share/nginx/web/transcoder && \
-	./web/uploads /usr/share/nginx/web/uploads && \
-	./web/web.config /usr/share/nginx/web/web.config
+# ADD ./web/assets /usr/share/nginx/web/assets && \
+# 	./web/simplesamlphp /usr/share/nginx/web/simplesamlphp && \
+# 	./web/transcoder /usr/share/nginx/web/transcoder && \
+# 	./web/uploads /usr/share/nginx/web/uploads && \
+# 	./web/web.config /usr/share/nginx/web/web.config
 
 # Add SSL
 RUN mkcert $DOMAIN_URL && \

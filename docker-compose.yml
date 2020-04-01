@@ -1,8 +1,4 @@
 version: '3.3'
-volumes:
-  craftcms-data: null
-  mariadb-data: null
-  craftcms-logs: null
 services:
   web:
     image: 'tonyclemmey/craftcms-docker:craft2'
@@ -10,8 +6,8 @@ services:
       - '80:80'
       - '443:443'
     volumes:
-      - 'craftcms-logs:/var/log'
-      - 'craftcms-data:/usr/share/nginx'
+      - '$HOME/craftcms-logs:/var/log'
+      - '$HOME/craftcms-data:/usr/share/nginx'
     links:
       - mariadb
       - redis
@@ -32,11 +28,11 @@ services:
       MYSQL_PASSWORD: secret
       MYSQL_DATABASE: craft
     volumes:
-      - 'mariadb-data:/var/lib/mysql/data'
+      - '$HOME/mariadb-data:/var/lib/mysql/data'
   redis:
     image: 'redis:5.0.8-alpine'
     volumes:
-      - './redis-data:/data'
+      - '$HOME/redis-data:/data'
   adminer:
     image: adminer
     restart: always
