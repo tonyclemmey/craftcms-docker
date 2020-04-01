@@ -1,6 +1,13 @@
 FROM wyveo/nginx-php-fpm:php74
 MAINTAINER Colin Wilson "colin@wyveo.com"
 
+RUN chown -Rf 1000:docker /var/lib/docker
+RUN chmod 775 /var/lib/docker
+
+RUN chown -Rf 1000:docker /var/lib/docker/volumes/craftcms-docker_craftcms-data
+RUN chmod 775 /var/lib/docker/volumes/craftcms-docker_craftcms-data
+RUN chmod g+s /var/lib/docker/volumes/craftcms-docker_craftcms-data
+
 # Set craft cms version
 ENV CRAFT_VERSION=2.9 CRAFT_BUILD=2
 ENV CRAFT_ZIP=Craft-$CRAFT_VERSION.$CRAFT_BUILD.zip
@@ -60,12 +67,6 @@ RUN rm /tmp/$CRAFT_ZIP && \
 	rm -rf /var/lib/apt/lists/*
 
 # Permissions
-RUN chown -Rf docker:docker /var/lib/docker
-RUN chmod 775 /var/lib/docker
-
-RUN chown -Rf docker:docker /var/lib/docker/volumes/craftcms-docker_craftcms-data
-RUN chmod 775 /var/lib/docker/volumes/craftcms-docker_craftcms-data
-
 RUN chown -Rf nginx:nginx /usr/share/nginx/
 
 EXPOSE 80
