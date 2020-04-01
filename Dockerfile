@@ -1,9 +1,6 @@
 FROM wyveo/nginx-php-fpm:php74
 MAINTAINER Colin Wilson "colin@wyveo.com"
 
-RUN groupadd -r opc \
-  && useradd -r -u 1000 -g opc opc
-
 # Set craft cms version
 ENV CRAFT_VERSION=2.9 CRAFT_BUILD=2
 ENV CRAFT_ZIP=Craft-$CRAFT_VERSION.$CRAFT_BUILD.zip
