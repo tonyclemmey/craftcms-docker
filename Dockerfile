@@ -29,8 +29,8 @@ RUN apt-get update -y && \
 	# Lynis security audit
 	apt-get install lynis -y
 
-# Remove default webroot files & set PHP session handler to Redis
-RUN rm -rf /usr/share/nginx/html/* && \
+# Remove and replace default webroot dir & set PHP session handler to Redis
+RUN rm -rf /usr/share/nginx/html && \
 	mkdir /usr/share/nginx/web && \
 	sed -i -e "s/memory_limit\s*=\s*.*/memory_limit = 256M/g" ${php_conf} && \
 	sed -i -e "s/session.save_handler\s*=\s*.*/session.save_handler = redis/g" ${php_conf} && \
@@ -50,6 +50,21 @@ ADD ./default.conf /etc/nginx/conf.d/default.conf
 
 # Add default config
 ADD ./config /usr/share/nginx/craft/config
+
+# Add custom craft files
+ADD ./craft/app /usr/share/nginx/craft/app && \
+	./craft/plugins /usr/share/nginx/craft/plugins && \
+	./craft/plus /usr/share/nginx/craft/plus && \
+	./craft/storage /usr/share/nginx/craft/storage && \
+	./craft/templates /usr/share/nginx/craft/templates && \
+	./craft/translations /usr/share/nginx/craft/translations
+
+# Add custom web files
+ADD ./web/assets /usr/share/nginx/web/assets && \
+	./web/simplesamlphp /usr/share/nginx/web/simplesamlphp && \
+	./web/transcoder /usr/share/nginx/web/transcoder && \
+	./web/uploads /usr/share/nginx/web/uploads && \
+	./web/web.config /usr/share/nginx/web/web.config
 
 # Add SSL
 RUN mkcert $DOMAIN_URL && \
