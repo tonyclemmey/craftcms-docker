@@ -1,10 +1,6 @@
 FROM wyveo/nginx-php-fpm:php74
 MAINTAINER Colin Wilson "colin@wyveo.com"
 
-# create different user
-RUN useradd -r -u 1000 -g appuser appuser
-USER appuser
-
 # Set craft cms version
 ENV CRAFT_VERSION=2.9 CRAFT_BUILD=2
 ENV CRAFT_ZIP=Craft-$CRAFT_VERSION.$CRAFT_BUILD.zip
@@ -53,21 +49,6 @@ ADD ./default.conf /etc/nginx/conf.d/default.conf
 # Add default craft cms config
 ADD ./config /usr/share/nginx/craft/config
 
-# Add custom craft files
-# ADD ./craft/app /usr/share/nginx/craft/app && \
-# 	./craft/plugins /usr/share/nginx/craft/plugins && \
-# 	./craft/plus /usr/share/nginx/craft/plus && \
-# 	./craft/storage /usr/share/nginx/craft/storage && \
-# 	./craft/templates /usr/share/nginx/craft/templates && \
-# 	./craft/translations /usr/share/nginx/craft/translations
-
-# Add custom web files
-# ADD ./web/assets /usr/share/nginx/web/assets && \
-# 	./web/simplesamlphp /usr/share/nginx/web/simplesamlphp && \
-# 	./web/transcoder /usr/share/nginx/web/transcoder && \
-# 	./web/uploads /usr/share/nginx/web/uploads && \
-# 	./web/web.config /usr/share/nginx/web/web.config
-
 # Add SSL
 RUN mkcert $DOMAIN_URL && \
 	cp ./$DOMAIN_URL.pem ./etc/ssl/$DOMAIN_URL.crt && \
@@ -79,13 +60,13 @@ RUN rm /tmp/$CRAFT_ZIP && \
 	rm -rf /var/lib/apt/lists/*
 
 # Permissions
-RUN chown -Rf nginx:nginx /usr/share/nginx/
+RUN chown -Rf docker:docker /var/lib/docker
+RUN chmod 775 /var/lib/docker
 
-# Check stuff
-RUN ffmpeg -version && \
-	php -v && \
-	php -m && \
-	brew list
+RUN chown -Rf docker:docker /var/lib/docker/volumes/craftcms-docker_craftcms-data
+RUN chmod 775 /var/lib/docker/volumes/craftcms-docker_craftcms-data
+
+RUN chown -Rf nginx:nginx /usr/share/nginx/
 
 EXPOSE 80
 EXPOSE 443
