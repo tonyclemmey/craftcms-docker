@@ -1,12 +1,9 @@
 FROM wyveo/nginx-php-fpm:php74
 MAINTAINER Colin Wilson "colin@wyveo.com"
 
-RUN chown -Rf 1000:docker /var/lib/docker
-RUN chmod 775 /var/lib/docker
-
-RUN chown -Rf 1000:docker /var/lib/docker/volumes/craftcms-docker_craftcms-data
-RUN chmod 775 /var/lib/docker/volumes/craftcms-docker_craftcms-data
-RUN chmod g+s /var/lib/docker/volumes/craftcms-docker_craftcms-data
+RUN groupadd -r appuser \
+  && useradd -r -u 1000 -g appuser appuser
+USER appuser
 
 # Set craft cms version
 ENV CRAFT_VERSION=2.9 CRAFT_BUILD=2
