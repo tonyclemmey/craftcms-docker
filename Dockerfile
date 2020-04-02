@@ -13,7 +13,7 @@ RUN apt-get update -y && \
 	# ffmpeg
 	apt-get install ffmpeg --no-install-recommends -y &&  \
 	# linuxbrew
-	apt-get install ca-certificates curl file g++ git locales make uuid-runtime --no-install-recommends -y && \
+	apt-get install g++ locales uuid-runtime --no-install-recommends -y && \
 	sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
 	dpkg-reconfigure locales && \
 	update-locale LANG=en_US.UTF-8 && \
