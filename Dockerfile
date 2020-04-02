@@ -10,18 +10,26 @@ ENV DOMAIN_URL=mysite.test
 
 ### Install some stuff ###
 RUN apt-get update -y && \
-	apt-get upgrade -y && \
 	# ffmpeg
 	apt-get install ffmpeg --no-install-recommends -y &&  \
 	# linuxbrew
-	apt-get install build-essential ruby-full locales --no-install-recommends -y
-	RUN localedef -i en_US -f UTF-8 en_US.UTF-8
-	RUN useradd -m -s /bin/bash linuxbrew && \
-	    echo 'linuxbrew ALL=(ALL) NOPASSWD:ALL' >>/etc/sudoers
+	apt-get install ca-certificates curl file g++ git locales make uuid-runtime --no-install-recommends -y && \
+	sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
+	dpkg-reconfigure locales && \
+	update-locale LANG=en_US.UTF-8 && \
+	useradd -m -s /bin/bash linuxbrew && \
+	echo 'linuxbrew ALL=(ALL) NOPASSWD:ALL' >>/etc/sudoers
 	USER linuxbrew
-	RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
+	WORKDIR /home/linuxbrew
+	ENV LANG=en_US.UTF-8 \
+		PATH=/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH \
+		SHELL=/bin/bash
+	RUN git clone https://github.com/Homebrew/brew /home/linuxbrew/.linuxbrew/Homebrew &&  \
+		mkdir /home/linuxbrew/.linuxbrew/bin && \
+		ln -s ../Homebrew/bin/brew /home/linuxbrew/.linuxbrew/bin/ && \
+		brew config
 	USER root
-	ENV PATH="/home/linuxbrew/.linuxbrew/bin:${PATH}"
+	WORKDIR /
 	# mkcert
 	RUN apt-get install libnss3-tools -y && \
 	brew install mkcert && \
@@ -64,3 +72,5 @@ RUN chown -Rf nginx:nginx /usr/share/nginx/
 
 EXPOSE 80
 EXPOSE 443
+
+# https://docs.docker.com/develop/develop-images/dockerfile_best-practices/
