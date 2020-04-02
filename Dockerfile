@@ -14,15 +14,15 @@ RUN userdel -f nginx && \
     /home/nginx \
     /root/.composer \
     /var/run/php \
-    /var/lib/php/sessions
-USER root
+    /var/lib/php/sessions \
+    /usr/share/nginx
+
+# Set domain / server name
+ENV DOMAIN_URL=mysite.test
 
 # Set craft cms version
 ENV CRAFT_VERSION=2.9 CRAFT_BUILD=2
 ENV CRAFT_ZIP=Craft-$CRAFT_VERSION.$CRAFT_BUILD.zip
-
-# Set domain / server name
-ENV DOMAIN_URL=mysite.test
 
 ### Install some stuff ###
 RUN apt-get update -y && \
@@ -88,5 +88,3 @@ RUN chown -Rf nginx:nginx /usr/share/nginx/
 
 EXPOSE 80
 EXPOSE 443
-
-# https://docs.docker.com/develop/develop-images/dockerfile_best-practices/
