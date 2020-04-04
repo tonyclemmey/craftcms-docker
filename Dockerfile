@@ -154,8 +154,8 @@ RUN mkcert $DOMAIN_URL && \
 	cp ./$DOMAIN_URL-key.pem ./etc/ssl/$DOMAIN_URL.key
 
 # Cleanup
-RUN rm /tmp/$CRAFT_ZIP && \
-	apt-get clean && apt-get autoclean && apt-get autoremove --purge && \
+# RUN rm /tmp/$CRAFT_ZIP && \
+RUN	apt-get clean && apt-get autoclean && apt-get autoremove --purge && \
 	rm -rf /var/lib/apt/lists/*
 
 # Permissions
