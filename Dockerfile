@@ -29,6 +29,7 @@ RUN userdel -f nginx && \
 # ==============================================================
 # 	Set the domain / server name to be used (used when creating mkcert SSL certs)
 # 	($ docker build -t test-build:v1 --build-arg URL=example.com)
+# 	https://blog.bitsrc.io/how-to-pass-environment-info-during-docker-builds-1f7c5566dd0e
 # ==============================================================
 ARG URL=mysite.test
 ENV DOMAIN_URL $URL
@@ -58,7 +59,7 @@ ARG BF_CLIENT_TOKEN=XXXX
 
 ENV BLACKFIRE_SERVER_ID $BF_SERV_ID
 ENV BLACKFIRE_SERVER_TOKEN $BF_SERV_TOKEN
-ENV BLACKFIRE_CLIENT_ID  $BF_CLIENT_ID
+ENV BLACKFIRE_CLIENT_ID $BF_CLIENT_ID
 ENV BLACKFIRE_CLIENT_TOKEN $BF_CLIENT_TOKEN
 
 # Update & upgrade
