@@ -133,20 +133,20 @@ RUN rm -rf /usr/share/nginx/html && \
 	sed -i -e "s/;session.save_path\s*=\s*.*/session.save_path = \"\${REDIS_PORT_6379_TCP}\"/g" ${php_conf}
 
 # Download the latest Craft (https://craftcms.com/support/download-previous-versions)
-ADD https://download.buildwithcraft.com/craft/$CRAFT_VERSION/$CRAFT_VERSION.$CRAFT_BUILD/$CRAFT_ZIP /tmp/$CRAFT_ZIP
+# ADD https://download.buildwithcraft.com/craft/$CRAFT_VERSION/$CRAFT_VERSION.$CRAFT_BUILD/$CRAFT_ZIP /tmp/$CRAFT_ZIP
 
 # Extract craft to webroot & remove default tedmplate files
-RUN unzip -qqo /tmp/$CRAFT_ZIP 'craft/*' -d /usr/share/nginx/ && \
-    unzip -qqoj /tmp/$CRAFT_ZIP 'public/index.php' -d /usr/share/nginx/web/
+# RUN unzip -qqo /tmp/$CRAFT_ZIP 'craft/*' -d /usr/share/nginx/ && \
+#     unzip -qqoj /tmp/$CRAFT_ZIP 'public/index.php' -d /usr/share/nginx/web/
 
 # Add default nginx config
 ADD ./default.conf /etc/nginx/conf.d/default.conf
 
 # Add craft config
-ADD ./config /usr/share/nginx/craft/config
+# ADD ./config /usr/share/nginx/craft/config
 
 # Add env file
-ADD ./env.php /usr/share/nginx/
+# ADD ./env.php /usr/share/nginx/
 
 # Add SSL
 RUN mkcert $DOMAIN_URL && \
