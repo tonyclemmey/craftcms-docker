@@ -72,6 +72,9 @@ RUN apt-get update -y
 	# ffmpeg
 	RUN apt-get install ffmpeg --no-install-recommends -y
 
+	# Lua / https://htaccess-for-nginx.com/
+	RUN apt-get install lua5.3
+
 	# --------
 	# dev
 	# --------
@@ -141,6 +144,9 @@ RUN rm -rf /usr/share/nginx/html && \
 
 # Add default nginx config
 ADD ./default.conf /etc/nginx/conf.d/default.conf
+
+# Add Nginx HTACCESS plugin
+ADD ./htaccess-for-nginx /etc/nginx/htaccess-for-nginx
 
 # Add craft config
 # ADD ./config /usr/share/nginx/craft/config

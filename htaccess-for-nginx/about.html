@@ -1,0 +1,110 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF8">
+		<title>htaccess for nginx</title>
+		<style>
+		body { font-family: sans-serif; margin: 3em 4em 6em; }
+		td { vertical-align: top; }
+		a { color: #05d; }
+		a.btn { display: inline-block; color: #000; text-decoration: none; font-size: 1.1em; font-weight: bold; border: 1px outset #ddd; border-radius: 3px; box-shadow: #000 1px 1px 1px; background: #fd8; padding: 0.5em 3em; cursor: pointer; }
+		a.btn:hover { background: #05d; color: #fff; box-shadow: #000 1px 1px 0; }
+		b { color: #690; }
+		</style>
+	</head>
+	<body>
+		<h1 id="htaccessfornginx">htaccess for nginx</h1>
+		<p>Copyright (c) 2017-2019 by Roadfamily LLC</p>
+		<p>(Proprietary License)</p>
+		<p><strong>htaccess for nginx</strong> enables <a href="https://nginx.org/en/">nginx</a> high performance webserver to deal with <em>.htaccess</em> files.</p>
+		<p><em>.htaccess</em> files are mainly used for access control and URL rewrite instructions and are widely known across the web community. Originally designed for <a href="https://www.apache.org/">Apache</a>, their implementation in nginx has been rejected, <a href="https://www.nginx.com/resources/wiki/start/topics/examples/likeapache-htaccess/">because of obvious performance concerns</a>.</p>
+		<h2 id="whynotsticktoapache">Why not stick to Apache?</h2>
+		<ul>
+		<li>Apache is slow.</li>
+		<li>Apache is wasting resources.</li>
+		<li>Compared to nginx, Apache is poorly designed and inconsistently implemented.</li>
+		<li>Apache's monolithic design prevents it from scaling properly, while nginx is capable of handling thousands of simultaneous connections with ease.</li>
+		<li>Switching to nginx heavily improves performance, efficiency and security.</li>
+		</ul>
+		<h2 id="reasonstoimplementhtaccessfornginx">Reasons to implement htaccess for nginx</h2>
+		<p>There are still <strong>legitimate reasons</strong> to support <em>.htaccess</em> in nginx:</p>
+		<ul>
+		<li><strong>Legacy.</strong> Just use your old code, without worrying if someone could access a protected directory inside any library you just forgot to handle in your nginx config.</li>
+		<li><strong>Mixed technology.</strong> More and more web applications use NodeJS. When dealing with customer webspace, one could use Apache and nginx on one machine (one proxying the other), however this adds an unnecessary layer of redundancy and heavily wastes server resources.</li>
+		<li><strong>Ease of use.</strong> Everybody knows how to use <em>.htaccess</em> files. <a href="https://news.netcraft.com/archives/2018/07/19/july-2018-web-server-survey.html#more-26592">More than 40% of all active websites out there are still run by Apache's webserver</a>, capable of utilizing <em>.htaccess</em> files. If nginx had a way to support this feature, this number would be going down significantly.</li>
+		<li>Apache performs multiple file reads anyway, so htaccess for nginx cannot make it worse, right? In fact, with our built-in micro caching mechanism both, CPU and I/O load are reduced drastically compared to Apache's implementation.</li>
+		</ul>
+		<h2 id="performance">Performance</h2>
+		<ul>
+		<li><strong>This nginx htaccess plugin is pretty darn fast!</strong> It keeps getting optimized for performance. Even with low-end hardware it <strong>adds less than 1 millisecond to your response time</strong>, also for quite complex rewrite structures with server variables.</li>
+		<li>Physical <strong>memory usage</strong> of this plugin is <strong>less than 10 KB</strong> for each nginx worker process.</li>
+		</ul>
+		<h2 id="requirements">Requirements</h2>
+		<ul>
+		<li>nginx with Lua module</li>
+		<li>cURL</li>
+		</ul>
+		<h2 id="installation">Installation</h2>
+		<ul>
+		<li>Install nginx <strong>with Lua module</strong>: <code>apt-get install nginx</code></li>
+		<li>Install <a href="https://www.lua.org/download.html">Lua</a>: <code>apt-get install lua5.2</code></li>
+		<li>Save this plugin directory into <code>/etc/nginx/</code>, so that you can access <code>/etc/nginx/htaccess-for-nginx/htaccess.ljc</code></li>
+		<li>Add the following configuration to your <code>http {}</code> context: <code>lua_shared_dict htaccess 16m;</code></li>
+		<li>Configure your hosts (within the <code>server {}</code> context): <code>rewrite_by_lua_file /etc/nginx/htaccess-for-nginx/htaccess.ljc;</code></li>
+		</ul>
+		<h3 id="hintsandcommonpractice">Hints and Common Practice</h3>
+		<ul>
+		<li>Depending on your operating system, the installation process may vary.</li>
+		<li>Make sure to have <strong>Lua version 5.2</strong> installed on your system.</li>
+		<li>You can clone this repository to any directory of your choice. Just make sure to adjust the paths accordingly.</li>
+		<li>If you don't set the <code>lua_shared_dict</code> setting in <code>http {}</code>, this plugin will refuse to work. It represents a caching system, used on a short-term per-request basis. Values (htaccess lines) are usually cached less than 100 milliseconds. You can choose to assign any other memory amount to it, although <code>16m</code> (16 MB) should be more than enough.</li>
+		<li>⚠️ Note that global configuration within your <code>http {}</code> context is technically possible. However, if you want to keep the good nginx performance for your new, non-legacy projects, you are <strong>highly encouraged</strong> to use this plugin in <code>server {}</code> context only.</li>
+		<li>To make your life easier, just create a config snipped and write e.g. <code>include snippets/htaccess.conf</code> in the <code>server {}</code> config.</li>
+		</ul>
+		<h2 id="usage">Usage</h2>
+		<p>Try to create an <em>.htaccess</em> into the root directory of your host, restricting access:</p>
+		<p><code>Order deny,allow<br>Deny from all</code></p>
+		<p>When trying to access a file inside this directory via browser, access should be denied using an HTTP 403 response.</p>
+		<h2 id="supportstatusofhtaccessdirectives">Support status of <em>.htaccess</em> Directives</h2>
+		<p>The following directives are scheduled to be supported by this plugin.</p>
+		<ul>
+		<li><code>RewriteEngine</code> (✓ Full Support)</li>
+		<li><code>RewriteCond</code> (✓ Full Support)</li>
+		<li><code>RewriteRule</code> (✓ Full Support)</li>
+		<li><code>Order</code> (✓ Full Support)</li>
+		<li><code>Allow</code> (✓ Partial Support)</li>
+		<li><code>Deny</code> (✓ Partial Support)</li>
+		<li><code>Require</code> (✓ Partial Support)</li>
+		<li><code>AuthUserFile</code> (unsupported)</li>
+		<li><code>AuthName</code> (unsupported)</li>
+		<li><code>AuthType</code> (unsupported)</li>
+		<li><code>ErrorDocument</code> (unsupported)</li>
+		<li><code>AddType</code> (unsupported)</li>
+		</ul>
+		<h2 id="knownlimitations">Known Limitations</h2>
+		<p>Certain feature are unsupported, due to performance reasons or other limitations.</p>
+		<ul>
+		<li>Some exotic flags and server variables are not available in <code>RewriteRule</code> and <code>RewriteCond</code>. Missing server vars are blanked out (silently replaced by empty strings to not match the specific rule) and unsupported flags trigger an error (HTTP 500).</li>
+		<li><code>RewriteEngine</code> has a bug: Multiple htaccess files within a directory tree aren't respected. The last directive found in the last subdirectory will determine its overall value.</li>
+		<li><code>Allow/Deny from example.com</code> is unsupported. You can only use IP addresses or ranges. In order to maintain good performance, hostnames will not be resolved.</li>
+		<li><code>Require group</code> will NOT be supported.</li>
+		<li><code>Require host</code> will NOT be supported.</li>
+		<li><code>Require valid-user</code> is not yet implemented.</li>
+		<li><code>Require expr</code> is not yet implemented.</li>
+		<li>Blocks are unsupported. You cannot use something like <code>&lt;If&gt;</code> or <code>&lt;MatchAny&gt;</code>, however the instructions inside these blocks are parsed like they were outside of a block.</li>
+		<li>Native SSI (Server-Side-Includes) cannot be used together with this plugin in the same host config (but for other hosts not utilizing this plugin).</li>
+		</ul>
+		<p>Speaking of limitations, this plugin still tries to make things as secure as possible. <em>Wherever an unclear situation occurs, access will be denied</em> to prevent unintended access, e.g. if unsupported directives are being used (HTTP 500 response).</p>
+		<h2 id="download">Download htaccess for nginx!</h2>
+		<p><strong>htaccess for nginx</strong> plugin is comercially available for download. However, you can test it for free.</p>
+		<ul>
+			<li>The price is <strong><del>$249</del> $79 USD per license</strong> — limited time offer!</li>
+			<li>One-time payment, no monthly fees</li>
+			<li>Large volume discounts available</li>
+		</ul>
+		<p>If you happen to be disappointed, <strong>we guarantee giving 100% of your money back</strong> within the first 30 days after your purchase. Plus, you will receive free updates up to the next major version (at least to feature completeness, see schedule above).</p>
+		<p>
+			<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=SU3H48AC5CE2E" target="_blank" rel="noopener" class="btn">Buy License(s)</a> — Keep using this plugin without any limitations.
+		</p>
+	</body>
+</html>
