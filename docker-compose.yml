@@ -6,13 +6,14 @@ volumes:
   craftcms-logs: null
 services:
   web:
-    image: 'tonyclemmey/craftcms-docker:craft2'
+    # image: 'tonyclemmey/craftcms-docker:craft2'
+    build: .
     ports:
       - '80:80'
       - '443:443'
     volumes:
       - 'craftcms-logs:/var/log'
-      - 'craftcms-data:/usr/share/nginx'
+      - 'craftcms-data:/var/www'
     links:
       - mariadb
       - redis
